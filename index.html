@@ -1,21 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Chito | Quản lí hàng bán</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
+    <!-- Deadline -->
     <div class="container">
         <h1>Deadline</h1>
         <button class="btn btn-primary" onclick="openForm()">+ Thêm deadline</button>
         <button class="btn btn-secondary" onclick="exportData()">Xuất file</button>
-        <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importData(event)" />
+        <input type="file" id="importFile" accept="application/json" style="display:none"
+            onchange="importData(event)" />
         <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Nhập file</button>
-        <button class="btn btn-danger" onclick="clearAll()">Xóa tất cả</button>
-    
-    
+        <button class="btn btn-danger" onclick="clearAllDeadlines()">Xóa tất cả</button>
+
         <table id="deadlineTable">
             <thead>
                 <tr>
@@ -36,19 +40,23 @@
                     <td data-label="Giá in">Giá in</td>
                     <td data-label="Số lượng">Số lượng</td>
                     <td data-label="Ngày hạn">Ngày hạn</td>
-                    <td data-label="Ghi chú">Ghi chú</td>
                     <td data-label="Trạng thái">Trạng thái</td>
+                    <td data-label="Ghi chú">Ghi chú</td>
+                    <td data-label="Hành động">...</td>
                 </tr>
             </tbody>
         </table>
     </div>
-    
+
+    <!-- Inventory -->
     <div class="container">
         <h1>Quản lý số lượng hàng</h1>
-        <button class="btn btn-primary" onclick="openInventoryForm()">+ Hàng hóa</button>
+        <button class="btn btn-primary" onclick="openInventoryForm()">+ Thêm Hàng hóa</button>
         <button class="btn btn-secondary" onclick="exportInventoryData()">Xuất file</button>
-        <input type="file" id="importInventoryFile" accept="application/json" style="display:none" onchange="importInventoryData(event)" />
-        <button class="btn btn-secondary" onclick="document.getElementById('importInventoryFile').click()">Nhập file</button>
+        <input type="file" id="importInventoryFile" accept="application/json" style="display:none"
+            onchange="importInventoryData(event)" />
+        <button class="btn btn-secondary" onclick="document.getElementById('importInventoryFile').click()">Nhập
+            file</button>
         <button class="btn btn-danger" onclick="clearAllInventory()">Xóa tất cả</button>
 
         <table id="inventoryTable">
@@ -61,23 +69,25 @@
                     <th>Giá gốc (VNĐ)</th>
                     <th>Giá bán (VNĐ)</th>
                     <th>Lợi nhuận (VNĐ)</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
-        <tr>
-            <td data-label="Tên hàng hóa">Tên hàng hóa</td>
-            <td data-label="Số lượng">Số lượng</td>
-            <td data-label="Số lượng đã bán">Số lượng đã bán</td>
-            <td data-label="Số lượng còn lại">Số lượng còn lại</td>
-            <td data-label="Giá gốc (VNĐ)">Giá gốc (VNĐ)</td>
-            <td data-label="Giá bán (VNĐ)">Giá bán (VNĐ)</td>
-            <td data-label="Lợi nhuận (VNĐ)">Lợi nhuận (VNĐ)</td>
-        </tr>
+                <tr>
+                    <td data-label="Tên hàng hóa">Tên hàng hóa</td>
+                    <td data-label="Số lượng">Số lượng</td>
+                    <td data-label="Số lượng đã bán">Số lượng đã bán</td>
+                    <td data-label="Số lượng còn lại">Số lượng còn lại</td>
+                    <td data-label="Giá gốc (VNĐ)">Giá gốc</td>
+                    <td data-label="Giá bán (VNĐ)">Giá bán</td>
+                    <td data-label="Lợi nhuận (VNĐ)">Lợi nhuận</td>
+                    <td data-label="Hành động">...</td>
+                </tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Form Popup Deadline -->
+    <!-- Popup Deadline -->
     <div id="formPopup" class="form-popup" style="display:none">
         <div class="form-box">
             <h3 id="formTitle">Thêm deadline</h3>
@@ -106,8 +116,7 @@
         </div>
     </div>
 
-
-    <!-- Form Popup Inventory -->
+    <!-- Popup Inventory -->
     <div id="inventoryFormPopup" class="form-popup" style="display:none">
         <div class="form-box">
             <h3 id="inventoryFormTitle">Thêm hàng hóa</h3>
@@ -130,13 +139,14 @@
                 <label>Ghi chú</label>
                 <textarea id="notes"></textarea>
                 <div style="margin-top:15px; text-align:right">
-                    <button type="submit">Lưu</button>
-                    <button type="button" onclick="closeInventoryForm()">Hủy</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeInventoryForm()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
                 </div>
             </form>
         </div>
+    </div>
 
     <script src="app.js"></script>
-
 </body>
+
 </html>

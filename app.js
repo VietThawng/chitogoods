@@ -1,36 +1,40 @@
-// ------------------------------------------------------------Deadline functionality---------------------------------------------------------
-const STORAGE_KEY = "deadlines_data";
- let deadlines = [];
+//------------------------------------------------------ Deadline functionality ----------------------------------------------------------
+const STORAGE_KEY = "deadlines_data"; // Key để lưu vào localStorage
+let deadlines = [];
 
-function loadData() {
+// Load dữ liệu deadline từ localStorage
+function loadDeadlineData() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) deadlines = JSON.parse(raw);
-    renderTable();
+    renderDeadlineTable();
 }
 
-function saveData() {
+// Lưu deadlines xuống localStorage
+function saveDeadlineData() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(deadlines));
 }
 
-function renderTable() {
+// Render bảng deadline
+function renderDeadlineTable() {
     const tbody = document.querySelector("#deadlineTable tbody");
     tbody.innerHTML = "";
     deadlines.forEach((d, idx) => {
         const tr = document.createElement("tr");
         if (d.status === "done") tr.classList.add("done");
         tr.innerHTML = `
-<td>${idx + 1}</td>
-<td>${d.title}<br/><small>${d.notes || ""}</small></td>
-<td>${d.client || ""}</td>
-<td>${d.qty || ""}</td>
-<td>${d.dueDate || ""}</td>
-<td>${d.status === "done" ? "Hoàn thành" : "Chưa xong"}</td>
-<td class="actions">
-<button onclick="editDeadline('${d.id}')">Sửa</button>
-<button onclick="deleteDeadline('${d.id}')">Xóa</button>
-<button onclick="toggleStatus('${d.id}')">Chuyển trạng thái</button>
-</td>
-`;
+            <td>${idx + 1}</td>
+            <td>${d.title}<br/><small>${d.notes || ""}</small></td>
+            <td>${d.client || ""}</td>
+            <td>${d.qty || ""}</td>
+            <td>${d.dueDate || ""}</td>
+            <td>${d.notes || ""}</td>
+            <td>${d.status === "done" ? "Hoàn thành" : "Chưa xong"}</td>
+            <td>
+                <button onclick="editDeadline('${d.id}')">Sửa</button>
+                <button onclick="deleteDeadline('${d.id}')">Xóa</button>
+                <button onclick="toggleDeadlineStatus('${d.id}')">Chuyển trạng thái</button>
+            </td>
+        `;
         tbody.appendChild(tr);
     });
     if (deadlines.length === 0) {
@@ -38,6 +42,7 @@ function renderTable() {
     }
 }
 
+// Các hàm CRUD deadline
 function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
 
 function openForm() {
@@ -68,8 +73,8 @@ function saveDeadline(e) {
     } else {
         deadlines.unshift(data);
     }
-    saveData();
-    renderTable();
+    saveDeadlineData();
+    renderDeadlineTable();
     closeForm();
 }
 
@@ -90,21 +95,21 @@ function editDeadline(id) {
 function deleteDeadline(id) {
     if (!confirm("Xóa mục này?")) return;
     deadlines = deadlines.filter(d => d.id !== id);
-    saveData();
-    renderTable();
+    saveDeadlineData();
+    renderDeadlineTable();
 }
 
-function toggleStatus(id) {
+function toggleDeadlineStatus(id) {
     deadlines = deadlines.map(d => d.id === id ? { ...d, status: d.status === "done" ? "pending" : "done" } : d);
-    saveData();
-    renderTable();
+    saveDeadlineData();
+    renderDeadlineTable();
 }
 
-function clearAll() {
+function clearAllDeadlines() {
     if (!confirm("Xóa toàn bộ dữ liệu?")) return;
     deadlines = [];
-    saveData();
-    renderTable();
+    saveDeadlineData();
+    renderDeadlineTable();
 }
 
 function exportData() {
@@ -124,8 +129,8 @@ function importData(e) {
             const arr = JSON.parse(evt.target.result);
             if (Array.isArray(arr)) {
                 deadlines = arr;
-                saveData();
-                renderTable();
+                saveDeadlineData();
+                renderDeadlineTable();
                 alert("Import thành công");
             } else alert("File không hợp lệ");
         } catch (err) { alert("Lỗi: " + err.message); }
@@ -133,115 +138,131 @@ function importData(e) {
     reader.readAsText(file);
 }
 
-//------------------------------------------------------inventory functionality----------------------------------------------------------
-const STORAGE_KEY_INVENTORY = "inventory_data";
- let inventory = [];
 
-function loadData() {
+//------------------------------------------------------ Inventory functionality ----------------------------------------------------------
+const STORAGE_KEY_INVENTORY = "inventory_data";
+let inventory = [];
+
+// Load dữ liệu inventory
+function loadInventoryData() {
     const raw = localStorage.getItem(STORAGE_KEY_INVENTORY);
     if (raw) inventory = JSON.parse(raw);
-    renderTable();
+    renderInventoryTable();
 }
 
-function saveData() {
+// Lưu inventory
+function saveInventoryData() {
     localStorage.setItem(STORAGE_KEY_INVENTORY, JSON.stringify(inventory));
 }
 
-function renderTable() {
+// Render bảng inventory
+function renderInventoryTable() {
     const tbody = document.querySelector("#inventoryTable tbody");
     tbody.innerHTML = "";
     inventory.forEach((d, idx) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-<td>${d.itemName}</td>
-<td>${d.sold}</td>
-<td>${d.remain}</td>
-<td>${d.cost}</td>
-<td>${d.sell}</td>
-<td>${d.profit}</td>
-<td>${d.notes || ""}</td>
-<td class="actions">
-<button onclick="editInventory('${d.inventoryId}')">Sửa</button>
-<button onclick="deleteInventory('${d.inventoryId}')">Xóa</button>
-</td>
-`;
+            <td>${d.itemName}</td>
+            <td>${d.totalQty}</td>
+            <td>${d.sold}</td>
+            <td>${d.remain}</td>
+            <td>${formatVND(d.cost)}</td>
+            <td>${formatVND(d.sell)}</td>
+            <td>${formatVND(d.profit)}</td> 
+            <td>
+                <button onclick="editInventory('${d.inventoryId}')">Sửa</button>
+                <button onclick="deleteInventory('${d.inventoryId}')">Xóa</button>
+            </td>
+        `;
         tbody.appendChild(tr);
-    }
-    );
+    });
     if (inventory.length === 0) {
         tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666">Không có hàng hóa nào.</td></tr>';
     }
 }
 
-function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
-
+// Form CRUD inventory
 function openInventoryForm() {
     document.getElementById("inventoryForm").reset();
-    document.getElementById("InventoryId").value = "";
-    document.getElementById("formTitle").innerText = "Thêm Hàng Hóa";
-    document.getElementById("inventoryformPopup").style.display = "flex";
+    document.getElementById("inventoryId").value = "";
+    document.getElementById("inventoryFormTitle").innerText = "Thêm hàng hóa";
+    document.getElementById("inventoryFormPopup").style.display = "flex";
 }
 
 function closeInventoryForm() {
-    document.getElementById("inventoryformPopup").style.display = "none";
+    document.getElementById("inventoryFormPopup").style.display = "none";
+}
+
+function formatVND(value) {
+    return value.toLocaleString("vi-VN") + " VNĐ";
+}
+
+function parseVND(value) {
+    if (!value) return 0;
+    return Number(value.toString().replace(/\./g, "").replace(/vnd|vnđ/gi, "").trim());
 }
 
 function saveInventory(e) {
     e.preventDefault();
-    const id = document.getElementById("InventoryId").value;
+    const id = document.getElementById("inventoryId").value;
+
+    const totalQty = Number(document.getElementById("totalQty").value);
+    const sold = Number(document.getElementById("sold").value);
+    const sell = parseVND(document.getElementById("sell").value); // ✅ dùng parse
+    const cost = parseVND(document.getElementById("cost").value); // ✅ dùng parse
+ 
     const data = {
         inventoryId: id || uid(),
         itemName: document.getElementById("itemName").value.trim(),
-        sold: document.getElementById("sold").value.trim(),
-        remain: document.getElementById("remain").value.trim(),
-        cost: document.getElementById("cost").value.trim(),
-        sell: document.getElementById("sell").value.trim(),
-        profit: document.getElementById("profit").value.trim(),
-        notes: document.getElementById("notes").value.trim(),
+        totalQty: totalQty,
+        sold: sold,
+        remain: totalQty - sold, // ✅ tự tính
+        cost: cost,
+        sell: sell,
+        profit: sold * sell, // ✅ tự tính
     };
-    if (!data.itemName || !data.remain) { alert("Thiếu tên hàng hoặc số lượng còn lại!"); return; }
+    if (!data.itemName) { alert("Thiếu tên hàng!"); return; }
     if (id) {
-        deadlines = deadlines.map(d => d.inventoryId === id ? data : d);
+        inventory = inventory.map(d => d.inventoryId === id ? data : d);
     } else {
-        deadlines.unshift(data);
+        inventory.unshift(data);
     }
-    saveData();
-    renderTable();
-    closeForm();
+    saveInventoryData();
+    renderInventoryTable();
+    closeInventoryForm();
 }
 
 function editInventory(id) {
-    const d = deadlines.find(x => x.id === id);
+    const d = inventory.find(x => x.inventoryId === id);
     if (!d) return;
-    document.getElementById("formTitle").innerText = "Chỉnh sửa Hàng Hóa";
-    document.getElementById("InventoryId").value = d.id;
+    document.getElementById("inventoryFormTitle").innerText = "Chỉnh sửa hàng hóa";
+    document.getElementById("inventoryId").value = d.inventoryId;
     document.getElementById("itemName").value = d.itemName;
+    document.getElementById("totalQty").value = d.totalQty;
     document.getElementById("sold").value = d.sold;
     document.getElementById("remain").value = d.remain;
     document.getElementById("cost").value = d.cost;
     document.getElementById("sell").value = d.sell;
     document.getElementById("profit").value = d.profit;
     document.getElementById("notes").value = d.notes;
-    document.getElementById("inventoryformPopup").style.display = "flex";
-    
+    document.getElementById("inventoryFormPopup").style.display = "flex";
 }
 
 function deleteInventory(id) {
     if (!confirm("Xóa mục này?")) return;
     inventory = inventory.filter(d => d.inventoryId !== id);
-    saveData();
-    renderTable();
+    saveInventoryData();
+    renderInventoryTable();
 }
 
-
-function clearAll() {
+function clearAllInventory() {
     if (!confirm("Xóa toàn bộ dữ liệu?")) return;
     inventory = [];
-    saveData();
-    renderTable();
+    saveInventoryData();
+    renderInventoryTable();
 }
 
-function exportData() {
+function exportInventoryData() {
     const blob = new Blob([JSON.stringify(inventory, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -249,7 +270,7 @@ function exportData() {
     URL.revokeObjectURL(url);
 }
 
-function importData(e) {
+function importInventoryData(e) {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -257,9 +278,9 @@ function importData(e) {
         try {
             const arr = JSON.parse(evt.target.result);
             if (Array.isArray(arr)) {
-                deadlines = arr;
-                saveData();
-                renderTable();
+                inventory = arr;
+                saveInventoryData();
+                renderInventoryTable();
                 alert("Import thành công");
             } else alert("File không hợp lệ");
         } catch (err) { alert("Lỗi: " + err.message); }
@@ -267,4 +288,7 @@ function importData(e) {
     reader.readAsText(file);
 }
 
-loadData();
+//------------------------------------------------------ Khởi động ----------------------------------------------------------
+// Load cả deadline và inventory khi mở web
+loadDeadlineData();
+loadInventoryData();

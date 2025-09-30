@@ -100,3 +100,165 @@ textarea {
     background: #dc2626;
     color: #fff;
 }
+
+/*==================MEDIA QUERY==================*/
+/* ✅ Mặc định: desktop & tablet */
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+table th,
+table td {
+    padding: 8px;
+    text-align: center;
+}
+
+/* ✅ Mobile: màn hình ≤ 768px */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 6px 10px;
+        margin: 3px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    table thead {
+        display: none;
+        /* ẩn header để hiển thị dạng card */
+    }
+
+    table tr {
+        display: block;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 8px;
+        background: #fff;
+    }
+
+    table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 4px;
+        border: none;
+        border-bottom: 1px dashed #ddd;
+    }
+
+    table td:last-child {
+        border-bottom: none;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        /* lấy nhãn từ data-label */
+        font-weight: bold;
+        color: #333;
+    }
+}
+
+/* ✅ Mobile nhỏ: màn hình ≤ 480px */
+/* ✅ Mặc định: desktop & tablet */
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+table th,
+table td {
+    padding: 8px;
+    text-align: center;
+}
+
+/* ✅ Mobile: màn hình ≤ 768px */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 6px 10px;
+        margin: 3px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    table thead {
+        display: none;
+        /* ẩn header để hiển thị dạng card */
+    }
+
+    table tr {
+        display: block;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 8px;
+        background: #fff;
+    }
+
+    table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 4px;
+        border: none;
+        border-bottom: 1px dashed #ddd;
+    }
+
+    table td:last-child {
+        border-bottom: none;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        /* lấy nhãn từ data-label */
+        font-weight: bold;
+        color: #333;
+    }
+}
+
+/* ✅ Mobile nhỏ: màn hình ≤ 480px */
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 5px;
+    }
+
+    h1 {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .form-box {
+        width: 95%;
+        padding: 10px;
+    }
+}

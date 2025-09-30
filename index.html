@@ -146,7 +146,32 @@
             </form>
         </div>
     </div>
-    <script src="app.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+        import { getFirestore, collection, getDocs, setDoc, addDoc, updateDoc, deleteDoc, doc }
+            from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfC5NQZw9O3gKzp0kVYZG3jrOTG9eOwsI",
+            authDomain: "chito-goods-a1653.firebaseapp.com",
+            projectId: "chito-goods-a1653",
+            storageBucket: "chito-goods-a1653.firebasestorage.app",
+            messagingSenderId: "988356300537",
+            appId: "1:988356300537:web:644dc6eb612bda470c1c28",
+            measurementId: "G-QTDPT1TT2Z"
+        };
+
+        // Init Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        // Firestore
+        export const db = getFirestore(app);
+        
+    </script>
+
 </body>
 
 </html>

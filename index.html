@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<button id="darkModeToggle">🌙</button>
 
     <!-- Deadline -->
     <div class="container">
@@ -50,7 +51,7 @@
 
     <!-- Inventory -->
     <div class="container">
-        <h1>Quản lý số lượng hàng</h1>
+        <h1>Số lượng hàng</h1>
         <button class="btn btn-primary" onclick="openInventoryForm()">+ Thêm Hàng hóa</button>
         <button class="btn btn-secondary" onclick="exportInventoryData()">Xuất file</button>
         <input type="file" id="importInventoryFile" accept="application/json" style="display:none"
@@ -145,7 +146,6 @@
             </form>
         </div>
     </div>
-
     <script src="app.js"></script>
 </body>
 

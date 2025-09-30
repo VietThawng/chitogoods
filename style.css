@@ -28,6 +28,11 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 5px;
+    background: #fff;
+}
+
+table tr {
+    background: #fff;
 }
 
 th,
@@ -101,6 +106,72 @@ textarea {
     color: #fff;
 }
 
+/* ================= Dark Mode ================= */
+.dark-mode {
+    background: #1e293b;
+    /* nền tối */
+    color: #f1f5f9;
+    /* chữ sáng */
+}
+
+.dark-mode .container {
+    background: #334155;
+    color: #f1f5f9;
+}
+
+.dark-mode table {
+    background: #475569;
+    color: #f1f5f9;
+}
+
+.dark-mode th {
+    background: #64748b;
+    color: #f1f5f9;
+}
+
+.dark-mode td {
+    border-color: #475569;
+}
+
+.dark-mode .form-box {
+    background: #334155;
+    color: #f1f5f9;
+}
+
+.dark-mode .btn-secondary {
+    background: #475569;
+    color: #f1f5f9;
+}
+
+#darkModeToggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 9999;
+
+    display: flex;
+    /* Giữ nội dung nằm giữa */
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    /* luôn cố định chiều rộng */
+    height: 40px;
+    /* luôn cố định chiều cao */
+    border-radius: 50%;
+    /* làm nút tròn */
+    background: #4690e5;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+
+    font-size: 18px;
+    /* cho icon hoặc text vừa phải */
+    line-height: 1;
+    padding: 0;
+    /* bỏ padding thừa */
+}
+
 /* ================= Responsive ================= */
 
 /* Mobile ≤ 768px */
@@ -147,8 +218,17 @@ textarea {
     table td::before {
         content: attr(data-label);
         font-weight: bold;
-        color: #333;
+        color: inherit;
     }
+
+    #darkModeToggle {
+    top: auto;
+    bottom: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
 }
 
 /* Mobile nhỏ ≤ 480px */
@@ -165,11 +245,36 @@ textarea {
     .btn {
         display: block;
         width: 100%;
-        margin-bottom: 5px;
+        margin-bottom: 5px; 
     }
 
     .form-box {
         width: 95%;
         padding: 10px;
     }
+
+    #darkModeToggle {
+        bottom: 10px;
+        right: 10px;
+        font-size: 11px;
+        padding: auto;
+    }
 }
+
+/* Dark mode fix cho bảng */
+body.dark-mode table {
+  color: #000000;              /* chữ trắng */
+  background-color: #222;   /* nền tối */
+}
+
+body.dark-mode th,
+body.dark-mode td {
+  color: #000000 !important;   /* ép trắng để không bị mất chữ */
+  border-color: #646464;       /* viền xám tối */
+}
+
+body.dark-mode .table-container {
+  background: #222;
+}
+
+

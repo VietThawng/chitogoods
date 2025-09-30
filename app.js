@@ -272,6 +272,34 @@ function formatVND(n) {
     return n.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 }
 
+//----------------- Dark Mode -----------------
+const darkModeToggle = document.getElementById("darkModeToggle");
+
+// Load trạng thái dark mode từ localStorage
+if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    darkModeToggle.textContent = "☀️";
+
+    // ✅ FIX: render lại bảng để tránh mất dữ liệu hiển thị khi mobile refresh layout
+    renderDeadlineTable();
+    renderInventoryTable();
+}
+
+darkModeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("darkMode", "enabled");
+        darkModeToggle.textContent = "☀️";
+    } else {
+        localStorage.setItem("darkMode", "disabled");
+        darkModeToggle.textContent = "🌙";
+    }
+
+    // ✅ FIX: luôn render lại để dữ liệu không bị mất khi đổi mode
+    renderDeadlineTable();
+    renderInventoryTable();
+});
+
 //------------------------------------------------------ Init ----------------------------------------------------------
 loadDeadlineData();
 loadInventoryData();

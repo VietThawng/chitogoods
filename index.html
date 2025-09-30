@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Chito | Quản lí hàng bán</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Deadline</h1>
+        <button class="btn btn-primary" onclick="openForm()">+ Thêm deadline</button>
+        <button class="btn btn-secondary" onclick="exportData()">Xuất file</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importData(event)" />
+        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Nhập file</button>
+        <button class="btn btn-danger" onclick="clearAll()">Xóa tất cả</button>
+    
+    
+        <table id="deadlineTable">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tiêu đề</th>
+                    <th>Giá in</th>
+                    <th>Số lượng</th>
+                    <th>Ngày hạn</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    
+    <div class="container">
+        <h1>Quản lý số lượng hàng</h1>
+        <button class="btn btn-primary" onclick="openInventoryForm()">+ Hàng hóa</button>
+        <button class="btn btn-secondary" onclick="exportInventoryData()">Xuất file</button>
+        <input type="file" id="importInventoryFile" accept="application/json" style="display:none" onchange="importInventoryData(event)" />
+        <button class="btn btn-secondary" onclick="document.getElementById('importInventoryFile').click()">Nhập file</button>
+        <button class="btn btn-danger" onclick="clearAllInventory()">Xóa tất cả</button>
+
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Tên hàng hóa</th>
+                    <th>Số lượng đã bán</th>
+                    <th>Số lượng còn lại</th>
+                    <th>Giá gốc (VNĐ)</th>
+                    <th>Giá bán (VNĐ)</th>
+                    <th>Lợi nhuận (VNĐ)</th>
+                </tr>
+            </thead>
+
+            
+    </div>
+
+    <!-- Form Popup Deadline -->
+    <div id="formPopup" class="form-popup" style="display:none">
+        <div class="form-box">
+            <h3 id="formTitle">Thêm deadline</h3>
+            <form id="deadlineForm" onsubmit="saveDeadline(event)">
+                <input type="hidden" id="deadlineId" />
+                <label>Tiêu đề *</label>
+                <input id="title" required />
+                <label>Giá in</label>
+                <input id="client" />
+                <label>Số lượng</label>
+                <input id="qty" />
+                <label>Ngày hạn *</label>
+                <input type="date" id="dueDate" required />
+                <label>Ghi chú</label>
+                <textarea id="notes"></textarea>
+                <label>Trạng thái</label>
+                <select id="status">
+                    <option value="pending">Chưa xong</option>
+                    <option value="done">Hoàn thành</option>
+                </select>
+                <div style="margin-top:15px; text-align:right">
+                    <button type="button" class="btn btn-secondary" onclick="closeForm()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Form Popup Inventory -->
+    <div id="inventoryFormPopup" class="form-popup" style="display:none">
+        <div class="form-box">
+            <h3 id="inventoryFormTitle">Thêm hàng hóa</h3>
+            <form id="inventoryForm" onsubmit="saveInventory(event)">
+                <input type="hidden" id="inventoryId" />
+                <label>Tên hàng hóa *</label>
+                <input id="itemName" required />
+                <label>Số lượng đã bán</label>
+                <input id="sold" type="number" min="0" value="0" />
+                <label>Số lượng còn lại</label>
+                <input id="remain" type="number" min="0" value="0" />
+                <label>Giá gốc (VNĐ)</label>
+                <input id="cost" type="number" min="0" value="0" />
+                <label>Giá bán (VNĐ)</label>
+                <input id="sell" type="number" min="0" value="0" />
+                <label>Lợi nhuận (VNĐ)</label>
+                <input id="profit" type="number" min="0" value="0" readonly />
+                <label>Ghi chú</label>
+                <textarea id="notes"></textarea>
+                <div style="margin-top:15px; text-align:right">
+                    <button type="button" class="btn btn-secondary" onclick="closeInventoryForm()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>

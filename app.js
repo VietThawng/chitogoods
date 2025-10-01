@@ -35,7 +35,7 @@ function renderDeadlineTable() {
         tbody.appendChild(tr);
     });
     if (deadlines.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666">Không có deadline nào.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666">Không có deadline</td></tr>';
     }
 }
 
@@ -115,7 +115,7 @@ function exportData() {
     const blob = new Blob([JSON.stringify(deadlines, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = "deadlines.json"; a.click();
+    a.href = url; a.download = "Deadlines + Số.json"; a.click();
     URL.revokeObjectURL(url);
 }
 
@@ -172,7 +172,7 @@ function renderInventoryTable() {
         tbody.appendChild(tr);
     });
     if (inventory.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666">Không có hàng hóa.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666">Không có hàng hóa</td></tr>';
     }
 }
 
@@ -199,7 +199,6 @@ function saveInventory(e) {
         cost: Number(document.getElementById("cost").value),
         sell: Number(document.getElementById("sell").value),
         profit: (Number(document.getElementById("sell").value) - Number(document.getElementById("cost").value)) * Number(document.getElementById("sold").value),
-        notes: document.getElementById("notes").value.trim(),
     };
     if (!data.itemName) { alert("Thiếu tên hàng hóa!"); return; }
     if (id) {

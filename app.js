@@ -1,29 +1,15 @@
-// ================= Import Firebase Firestore =================
-import {
-    db
-} from "./firebase.js"; // file firebase.js chứa đoạn initializeApp + export db
-import {
-    collection,
-    getDocs,
-    setDoc,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    doc,
-    onSnapshot
-} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-
 //------------------------------------------------------ Deadline functionality ----------------------------------------------------------
+const STORAGE_KEY = "deadlines_data";
 let deadlines = [];
-const deadlinesCol = collection(db, "deadlines");
 
-// Load realtime
 function loadDeadlineData() {
-    onSnapshot(deadlinesCol, (snapshot) => {
-        deadlines = [];
-        snapshot.forEach(docSnap => deadlines.push(docSnap.data()));
-        renderDeadlineTable();
-    });
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) deadlines = JSON.parse(raw);
+    renderDeadlineTable();
+}
+
+function saveDeadlineData() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(deadlines));
 }
 
 function renderDeadlineTable() {
@@ -49,8 +35,7 @@ function renderDeadlineTable() {
         tbody.appendChild(tr);
     });
     if (deadlines.length === 0) {
-        tbody.innerHTML =
-            '<tr><td colspan="8" style="text-align:center;color:#666">Không có deadline nào.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666">Không có deadline nào.</td></tr>';
     }
 }
 
@@ -69,11 +54,11 @@ function closeForm() {
     document.getElementById("formPopup").style.display = "none";
 }
 
-async function saveDeadline(e) {
+function saveDeadline(e) {
     e.preventDefault();
-    const id = document.getElementById("deadlineId").value || uid();
+    const id = document.getElementById("deadlineId").value;
     const data = {
-        id,
+        id: id || uid(),
         title: document.getElementById("title").value.trim(),
         client: document.getElementById("client").value.trim(),
         qty: document.getElementById("qty").value.trim(),
@@ -81,11 +66,14 @@ async function saveDeadline(e) {
         notes: document.getElementById("notes").value.trim(),
         status: document.getElementById("status").value
     };
-    if (!data.title || !data.dueDate) {
-        alert("Thiếu tiêu đề hoặc ngày hạn!");
-        return;
+    if (!data.title || !data.dueDate) { alert("Thiếu tiêu đề hoặc ngày hạn!"); return; }
+    if (id) {
+        deadlines = deadlines.map(d => d.id === id ? data : d);
+    } else {
+        deadlines.unshift(data);
     }
-    await setDoc(doc(db, "deadlines", id), data);
+    saveDeadlineData();
+    renderDeadlineTable();
     closeForm();
 }
 
@@ -103,36 +91,64 @@ function editDeadline(id) {
     document.getElementById("formPopup").style.display = "flex";
 }
 
-async function deleteDeadline(id) {
+function deleteDeadline(id) {
     if (!confirm("Xóa mục này?")) return;
-    await deleteDoc(doc(db, "deadlines", id));
+    deadlines = deadlines.filter(d => d.id !== id);
+    saveDeadlineData();
+    renderDeadlineTable();
 }
 
-async function toggleDeadlineStatus(id) {
-    const d = deadlines.find(x => x.id === id);
-    if (!d) return;
-    const newStatus = d.status === "done" ? "pending" : "done";
-    await updateDoc(doc(db, "deadlines", id), { status: newStatus });
+function toggleDeadlineStatus(id) {
+    deadlines = deadlines.map(d => d.id === id ? { ...d, status: d.status === "done" ? "pending" : "done" } : d);
+    saveDeadlineData();
+    renderDeadlineTable();
 }
 
-async function clearAllDeadlines() {
+function clearAllDeadlines() {
     if (!confirm("Xóa toàn bộ dữ liệu?")) return;
-    const snapshot = await getDocs(deadlinesCol);
-    snapshot.forEach(async docSnap => {
-        await deleteDoc(doc(db, "deadlines", docSnap.id));
-    });
+    deadlines = [];
+    saveDeadlineData();
+    renderDeadlineTable();
+}
+
+function exportData() {
+    const blob = new Blob([JSON.stringify(deadlines, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "deadlines.json"; a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = evt => {
+        try {
+            const arr = JSON.parse(evt.target.result);
+            if (Array.isArray(arr)) {
+                deadlines = arr;
+                saveDeadlineData();
+                renderDeadlineTable();
+                alert("Import thành công");
+            } else alert("File không hợp lệ");
+        } catch (err) { alert("Lỗi: " + err.message); }
+    };
+    reader.readAsText(file);
 }
 
 //------------------------------------------------------ Inventory functionality ----------------------------------------------------------
+const STORAGE_KEY_INVENTORY = "inventory_data";
 let inventory = [];
-const inventoryCol = collection(db, "inventory");
 
 function loadInventoryData() {
-    onSnapshot(inventoryCol, (snapshot) => {
-        inventory = [];
-        snapshot.forEach(docSnap => inventory.push(docSnap.data()));
-        renderInventoryTable();
-    });
+    const raw = localStorage.getItem(STORAGE_KEY_INVENTORY);
+    if (raw) inventory = JSON.parse(raw);
+    renderInventoryTable();
+}
+
+function saveInventoryData() {
+    localStorage.setItem(STORAGE_KEY_INVENTORY, JSON.stringify(inventory));
 }
 
 function renderInventoryTable() {
@@ -156,8 +172,7 @@ function renderInventoryTable() {
         tbody.appendChild(tr);
     });
     if (inventory.length === 0) {
-        tbody.innerHTML =
-            '<tr><td colspan="8" style="text-align:center;color:#666">Không có hàng hóa.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666">Không có hàng hóa.</td></tr>';
     }
 }
 
@@ -172,11 +187,11 @@ function closeInventoryForm() {
     document.getElementById("inventoryFormPopup").style.display = "none";
 }
 
-async function saveInventory(e) {
+function saveInventory(e) {
     e.preventDefault();
-    const id = document.getElementById("inventoryId").value || uid();
+    const id = document.getElementById("inventoryId").value;
     const data = {
-        inventoryId: id,
+        inventoryId: id || uid(),
         itemName: document.getElementById("itemName").value.trim(),
         totalQty: Number(document.getElementById("totalQty").value),
         sold: Number(document.getElementById("sold").value),
@@ -186,11 +201,14 @@ async function saveInventory(e) {
         profit: (Number(document.getElementById("sell").value) - Number(document.getElementById("cost").value)) * Number(document.getElementById("sold").value),
         notes: document.getElementById("notes").value.trim(),
     };
-    if (!data.itemName) {
-        alert("Thiếu tên hàng hóa!");
-        return;
+    if (!data.itemName) { alert("Thiếu tên hàng hóa!"); return; }
+    if (id) {
+        inventory = inventory.map(d => d.inventoryId === id ? data : d);
+    } else {
+        inventory.unshift(data);
     }
-    await setDoc(doc(db, "inventory", id), data);
+    saveInventoryData();
+    renderInventoryTable();
     closeInventoryForm();
 }
 
@@ -210,17 +228,44 @@ function editInventory(id) {
     document.getElementById("inventoryFormPopup").style.display = "flex";
 }
 
-async function deleteInventory(id) {
+function deleteInventory(id) {
     if (!confirm("Xóa hàng hóa này?")) return;
-    await deleteDoc(doc(db, "inventory", id));
+    inventory = inventory.filter(d => d.inventoryId !== id);
+    saveInventoryData();
+    renderInventoryTable();
 }
 
-async function clearAllInventory() {
+function clearAllInventory() {
     if (!confirm("Xóa toàn bộ hàng hóa?")) return;
-    const snapshot = await getDocs(inventoryCol);
-    snapshot.forEach(async docSnap => {
-        await deleteDoc(doc(db, "inventory", docSnap.id));
-    });
+    inventory = [];
+    saveInventoryData();
+    renderInventoryTable();
+}
+
+function exportInventoryData() {
+    const blob = new Blob([JSON.stringify(inventory, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "inventory.json"; a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importInventoryData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = evt => {
+        try {
+            const arr = JSON.parse(evt.target.result);
+            if (Array.isArray(arr)) {
+                inventory = arr;
+                saveInventoryData();
+                renderInventoryTable();
+                alert("Import thành công");
+            } else alert("File không hợp lệ");
+        } catch (err) { alert("Lỗi: " + err.message); }
+    };
+    reader.readAsText(file);
 }
 
 function formatVND(n) {
@@ -234,6 +279,10 @@ const darkModeToggle = document.getElementById("darkModeToggle");
 if (localStorage.getItem("darkMode") === "enabled") {
     document.body.classList.add("dark-mode");
     darkModeToggle.textContent = "☀️";
+
+    // ✅ FIX: render lại bảng để tránh mất dữ liệu hiển thị khi mobile refresh layout
+    renderDeadlineTable();
+    renderInventoryTable();
 }
 
 darkModeToggle.addEventListener("click", () => {
@@ -245,24 +294,12 @@ darkModeToggle.addEventListener("click", () => {
         localStorage.setItem("darkMode", "disabled");
         darkModeToggle.textContent = "🌙";
     }
+
+    // ✅ FIX: luôn render lại để dữ liệu không bị mất khi đổi mode
+    renderDeadlineTable();
+    renderInventoryTable();
 });
 
 //------------------------------------------------------ Init ----------------------------------------------------------
 loadDeadlineData();
 loadInventoryData();
-
-// Gắn hàm vào window để nút onclick trong HTML gọi được
-window.openForm = openForm;
-window.closeForm = closeForm;
-window.saveDeadline = saveDeadline;
-window.editDeadline = editDeadline;
-window.deleteDeadline = deleteDeadline;
-window.toggleDeadlineStatus = toggleDeadlineStatus;
-window.clearAllDeadlines = clearAllDeadlines;
-
-window.openInventoryForm = openInventoryForm;
-window.closeInventoryForm = closeInventoryForm;
-window.saveInventory = saveInventory;
-window.editInventory = editInventory;
-window.deleteInventory = deleteInventory;
-window.clearAllInventory = clearAllInventory;

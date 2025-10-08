@@ -11,7 +11,28 @@
 <body>
 <button id="darkModeToggle">🌙</button>
 
+
+<!----------------------------Menu----------------------------->
+<div class="sidebar">
+    <div class="sidebar">
+        <button class="tab-home" onclick="showTab('homeSection')">Trang chủ</button>
+        <button class="tab-btn active" onclick="showTab('deadlineSection')">Deadline</button>
+        <button class="tab-btn" onclick="showTab('inventorySection')">Hàng hóa</button>
+    </div>
+    
+</div>
+
+    <div class = main-content>
+    <!-- HOME -->
+    <div id="homeSection" class="tab-content">
+        <div class="container">
+       <h1><strong>TRANG QUẢN LÍ HÀNG BÁN CHO CHITO</strong></h1> 
+       <p>Một số các mặt hàng hiện có:</p>    
+
+       </div>
+    </div>
     <!-- Deadline -->
+    <div id="deadlineSection" class="tab-content active">
     <div class="container">
         <h1>Deadline</h1>
         <button class="btn btn-primary" onclick="openForm()">+ Thêm deadline</button>
@@ -48,8 +69,11 @@
             </tbody>
         </table>
     </div>
+    </div>
+   
 
     <!-- Inventory -->
+    <div id="inventorySection" class="tab-content">
     <div class="container">
         <h1>Số lượng hàng</h1>
         <button class="btn btn-primary" onclick="openInventoryForm()">+ Thêm Hàng hóa</button>
@@ -87,7 +111,8 @@
             </tbody>
         </table>
     </div>
-
+    </div>
+    </div>
     <!-- Popup Deadline -->
     <div id="formPopup" class="form-popup" style="display:none">
         <div class="form-box">

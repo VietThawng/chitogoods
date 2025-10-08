@@ -271,6 +271,17 @@ function formatVND(n) {
     return n.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 }
 
+// -------------------- Tab Menu --------------------
+function showTab(tabId) { // Ẩn tất cả tab
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active')); // Bỏ active ở menu
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); // Hiện tab được chọn
+    document.querySelectorAll('.tab-home').forEach(btn => btn.classList.remove('active')); // Bỏ active ở nút home
+    document.getElementById(tabId).classList.add('active'); // Active nút menu tương ứng
+    event.target.classList.add('active');
+}
+
+
+
 //----------------- Dark Mode -----------------
 const darkModeToggle = document.getElementById("darkModeToggle");
 

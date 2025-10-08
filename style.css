@@ -1,3 +1,69 @@
+/* ================= Sidebar ================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 180px;
+    height: 100%;
+    background: #1e40af;
+    color: #fff;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.tab-btn,
+.tab-home {
+    width: 100%;
+    background: transparent;
+    color: #fff;
+    border: none;
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    transition: background 0.3s;
+}
+
+.tab-btn:hover,
+.tab-btn.active,
+.tab-home:hover {
+    background: #3b82f6;
+}
+
+/* ================= Main content ================= */
+.main-content {
+    margin-left: 200px;
+    padding: 20px;
+}
+
+/* Ẩn tab mặc định */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Dark mode cho sidebar */
+.dark-mode .sidebar {
+    background: #0f172a;
+}
+
+.dark-mode .tab-btn.active {
+    background: #475569;
+}
+
+
+
 body {
     font-family: Arial, sans-serif;
     background: #f9fafb;
@@ -229,6 +295,23 @@ textarea {
     height: 45px;
     font-size: 20px;
   }
+        .sidebar {
+            position: relative;
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    
+        .tab-btn {
+            text-align: center;
+            flex: 1;
+        }
+    
+        .main-content {
+            margin-left: 0;
+        }
 }
 
 /* Mobile nhỏ ≤ 480px */

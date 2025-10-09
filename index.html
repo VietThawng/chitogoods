@@ -15,8 +15,8 @@
 <!----------------------------Menu----------------------------->
 <div class="sidebar">
     <div class="sidebar">
-        <button class="tab-home" onclick="showTab('homeSection')">Trang chủ</button>
-        <button class="tab-btn active" onclick="showTab('deadlineSection')">Deadline</button>
+        <button class="tab-home active" onclick="showTab('homeSection')">Trang chủ</button>
+        <button class="tab-btn" onclick="showTab('deadlineSection')">Deadline</button>
         <button class="tab-btn" onclick="showTab('inventorySection')">Hàng hóa</button>
     </div>
     
@@ -24,15 +24,17 @@
 
     <div class = main-content>
     <!-- HOME -->
-    <div id="homeSection" class="tab-content">
+    <div id="homeSection" class="tab-content active">
         <div class="container">
        <h1><strong>TRANG QUẢN LÍ HÀNG BÁN CHO CHITO</strong></h1> 
        <p>Một số các mặt hàng hiện có:</p>    
-
+       <ol>
+        <li>Packsticker</li>
+       </ol> 
        </div>
     </div>
     <!-- Deadline -->
-    <div id="deadlineSection" class="tab-content active">
+    <div id="deadlineSection" class="tab-content">
     <div class="container">
         <h1>Deadline</h1>
         <button class="btn btn-primary" onclick="openForm()">+ Thêm deadline</button>

@@ -41,6 +41,53 @@
 }
 
 /* ================= Main content ================= */
+.home-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.home-card {
+    width: 150px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.home-card img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.home-card-info {
+    padding: 10px;
+}
+
+.home-card-actions {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.home-edit-name {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.home-card-actions button {
+    font-size: 12px;
+    padding: 4px 6px;
+}
+
 .main-content {
     margin-left: 200px;
     padding: 20px;
@@ -64,7 +111,10 @@
     background: #475569;
 }
 
-
+.dark-mode .home-card {
+    background: #334155;
+    color: #f1f5f9;
+}
 
 body {
     font-family: 'Be Vietnam Pro', sans-serif;

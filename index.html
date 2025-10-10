@@ -26,15 +26,14 @@
 
     <div class = main-content>
     <!-- HOME -->
-    <div id="homeSection" class="tab-content active">
-        <div class="container">
-       <h1>QUẢN LÍ HÀNG HÓA</h1> 
-       <p>Các mặt hàng sẵn có</p>    
-       <ol>
-        <li>Packsticker</li>
-       </ol> 
-       </div>
+<div id="homeSection" class="tab-content active">
+    <div class="container">
+        <h1>QUẢN LÍ HÀNG HÓA</h1>
+        <button class="btn btn-primary" onclick="openHomeForm()">+ Thêm sản phẩm</button>
+        <div id="homeList" class="home-list"></div>
     </div>
+</div>
+
     <!-- Deadline -->
     <div id="deadlineSection" class="tab-content">
     <div class="container">
@@ -117,6 +116,27 @@
     </div>
     </div>
     </div>
+
+    <!-- Popup thêm ảnh -->
+    <div id="homeFormPopup" class="form-popup" style="display:none">
+        <div class="form-box">
+            <h3 id="homeFormTitle">Thêm sản phẩm</h3>
+            <form id="homeForm" onsubmit="saveHomeItem(event)">
+                <input type="hidden" id="homeItemId" />
+                <label>Tên hàng *</label>
+                <input id="homeItemName" required />
+    
+                <label>Hình ảnh (JPG/PNG) *</label>
+                <input type="file" id="homeItemImage" accept="image/png, image/jpeg" multiple required />
+    
+                <div style="margin-top:15px; text-align:right">
+                    <button type="button" class="btn btn-secondary" onclick="closeHomeForm()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Popup Deadline -->
     <div id="formPopup" class="form-popup" style="display:none">
         <div class="form-box">

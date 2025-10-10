@@ -1,3 +1,129 @@
+//------------------------------------------------------ Home Image Gallery ----------------------------------------------------------
+const STORAGE_KEY_HOME = "home_items";
+let homeItems = [];
+
+function loadHomeData() {
+    const raw = localStorage.getItem(STORAGE_KEY_HOME);
+    if (raw) homeItems = JSON.parse(raw);
+    renderHomeList();
+}
+
+function saveHomeData() {
+    localStorage.setItem(STORAGE_KEY_HOME, JSON.stringify(homeItems));
+}
+
+function renderHomeList() {
+    const list = document.getElementById("homeList");
+    list.innerHTML = "";
+    if (homeItems.length === 0) {
+        list.innerHTML = "<p style='text-align:center;color:#666'>Chưa có sản phẩm nào</p>";
+        return;
+    }
+    homeItems.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "home-card";
+        div.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <div class="home-card-info">
+                <strong>${item.name}</strong>
+                <div class="home-card-actions">
+                    <button onclick="editHomeItem('${item.id}')">Sửa</button>
+                    <button onclick="deleteHomeItem('${item.id}')">Xóa</button>
+                    <button onclick="sellHomeItem('${item.id}')">Bán</button>
+                </div>
+            </div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+
+function openHomeForm() {
+    document.getElementById("homeForm").reset();
+    document.getElementById("homeItemId").value = "";
+    document.getElementById("homeFormTitle").innerText = "Thêm sản phẩm";
+    document.getElementById("homeFormPopup").style.display = "flex";
+}
+
+function closeHomeForm() {
+    document.getElementById("homeFormPopup").style.display = "none";
+}
+
+function saveHomeItem(e) {
+    e.preventDefault();
+    const id = document.getElementById("homeItemId").value;
+    const name = document.getElementById("homeItemName").value.trim();
+    const fileInput = document.getElementById("homeItemImage");
+    if (!name) { alert("Vui lòng nhập tên sản phẩm"); return; }
+
+    const handleSave = (imageData) => {
+        const data = { id: id || uid(), name, image: imageData || (id ? homeItems.find(i => i.id === id).image : "") };
+        if (id) {
+            homeItems = homeItems.map(i => i.id === id ? data : i);
+        } else {
+            homeItems.unshift(data);
+        }
+        saveHomeData();
+        renderHomeList();
+        closeHomeForm();
+    };
+
+    if (fileInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = evt => handleSave(evt.target.result);
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        handleSave();
+    }
+}
+
+function sellHomeItem(name) {
+    if (!name) { alert("Sản phẩm không tồn tại"); 
+        return; 
+    }
+
+    // Tìm sản phẩm tương ứng trong inventory
+    const itemIndex = inventory.findIndex(i => i.itemName.toLowerCase() === name.toLowerCase());
+
+    if (itemIndex === -1) {
+        alert(`Không tìm thấy "${name}" trong danh sách hàng hóa. Vui lòng thêm sản phẩm này trong mục Hàng hóa trước.`);
+        return;
+    }
+
+    const qty = Number(prompt(`Nhập số lượng bán cho "${name}"`, 1));
+    if (isNaN(qty) || qty <= 0) return;
+    if (item.remain < qty) {
+        alert(`Không đủ hàng. Hiện chỉ còn ${item.remain} cái.`);
+        return;
+    }
+    item.sold += qty;
+    item.remain -= qty;
+    item.profit = (item.sell - item.cost) * item.sold;
+
+    inventory[itemIndex] = item;
+    saveInventoryData();
+    renderInventoryTable();
+
+    alert(`✅ Đã bán 1 "${name}" — Còn lại ${item.remain}`);
+}
+
+function editHomeItem(id) {
+    const item = homeItems.find(i => i.id === id);
+    if (!item) return;
+    document.getElementById("homeFormTitle").innerText = "Chỉnh sửa sản phẩm";
+    document.getElementById("homeItemId").value = item.id;
+    document.getElementById("homeItemName").value = item.name;
+    document.getElementById("homeFormPopup").style.display = "flex";
+}
+
+function deleteHomeItem(id) {
+    if (!confirm("Xóa sản phẩm này?")) return;
+    homeItems = homeItems.filter(i => i.id !== id);
+    saveHomeData();
+    renderHomeList();
+}
+
+
 //------------------------------------------------------ Deadline functionality ----------------------------------------------------------
 const STORAGE_KEY = "deadlines_data";
 let deadlines = [];
@@ -313,3 +439,4 @@ darkModeToggle.addEventListener("click", () => {
 //------------------------------------------------------ Init ----------------------------------------------------------
 loadDeadlineData();
 loadInventoryData();
+loadHomeData();
